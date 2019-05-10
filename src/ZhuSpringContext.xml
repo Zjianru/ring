@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean name="TestBeanA" class="com.zhu.bean.TestBeanA">
+        <property name = "name" value = "tom"/>
+    </bean>
+    <bean name="TestBeanB" class="com.zhu.bean.TestBeanB">
+        <property name = "TestBeanA" ref = "TestBeanA"/>
+    </bean>
+</beans>
