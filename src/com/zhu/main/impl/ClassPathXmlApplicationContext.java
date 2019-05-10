@@ -103,7 +103,7 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
 					Object existBean =  context.get(property.getRef());
 					if(existBean == null ){
 						existBean = createBean(config.get(property.getRef()));
-						if(config.get(property.getRef()).getScope().equals("singleton")){
+						if("singleton".equals(config.get(property.getRef()).getScope())){
 							context.put(property.getRef(), existBean);
 						}
 					}
