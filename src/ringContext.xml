@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
+
     <bean name="TestBeanA" class="com.zhu.bean.TestBeanA">
-        <property name = "name" value = "tom"/>
+        <property name = "name" value = "TestA"/>
     </bean>
+
     <bean name="TestBeanB" class="com.zhu.bean.TestBeanB">
-        <property name = "TestBeanA" ref = "TestBeanA"/>
+        <property name = "testBeanA" ref = "TestBeanA"/>
+        <property name="name" value="TestB"/>
     </bean>
+
 </beans>

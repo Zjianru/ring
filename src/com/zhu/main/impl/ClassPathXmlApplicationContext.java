@@ -37,7 +37,7 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
 				String beanName = en.getKey();
 				Bean bean = en.getValue();
 				Object existBean = context.get(beanName);
-				if (existBean == null) {
+				if (existBean == null && "singleton".equals(bean.getScope())) {
 					Object beanObj = createBean(bean);
 					context.put(beanName, beanObj);
 				}
@@ -53,7 +53,11 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
 	 */
 	@Override
 	public Object getBean(String beanName) {
-		return context.get(beanName);
+		Object bean = context.get(beanName);
+		if (bean == null){
+			bean =  createBean(config.get(beanName));
+		}
+		return bean;
 	}
 
 	/**
@@ -84,7 +88,6 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
 		// 开始注入属性
 		if (bean.getPropertyList() != null) {
 			for (Property property : bean.getPropertyList()) {
-
 				// 普通属性——直接注入
 				if (property.getValue() != null) {
 					Map<String,String[]> paramMap = new HashMap<>();
@@ -95,28 +98,25 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
 						e.printStackTrace();
 					}
 				}
-
-				// 含有引用属性，需创建改引用对象
-				if (property.getRef() != null) {
-					Method setMethod = BeanUtil.getWriteMethod(beanObj,className);
-					Object existBean = context.get(property.getRef());
-					if (existBean == null) {
+				if(property.getRef()!=null){
+					Method setMethod = BeanUtil.getWriteMethod(beanObj,property.getName());
+					Object existBean =  context.get(property.getRef());
+					if(existBean == null ){
 						existBean = createBean(config.get(property.getRef()));
-						if ("singleton".equals(config.get(property.getRef()).getScope())){
+						if(config.get(property.getRef()).getScope().equals("singleton")){
 							context.put(property.getRef(), existBean);
 						}
 					}
-					// 完成注入
+					// 调用set方法注入即可
 					try {
-						setMethod.invoke(beanObj,existBean);
-					} catch (IllegalAccessException | InvocationTargetException e) {
+						setMethod.invoke(beanObj, existBean);
+					} catch (Exception e) {
 						e.printStackTrace();
-						throw new RuntimeException(" ERROR [ legal set method not found in class : " + className + " ]");
+						throw new RuntimeException("客官!您的Bean的属性"+property.getName()+"没有对应的set方法,或方法参数不正确"+className);
 					}
 				}
 			}
 		}
 		return beanObj;
 	}
-
 }

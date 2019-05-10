@@ -16,19 +16,19 @@ import java.lang.reflect.Method;
  */
 public class BeanUtil {
 	/**
-	 *
 	 * @param beanObj 对象
-	 * @param name 对象对应的属性名称
+	 * @param name    对象对应的属性名称
 	 * @return Method
 	 */
-	public static Method getWriteMethod(Object beanObj,String name){
+	public static Method getWriteMethod(Object beanObj, String name) {
 		Method method = null;
 		try {
-			BeanInfo beanInfo = Introspector.getBeanInfo(beanObj.getClass());
-			PropertyDescriptor[] descriptors = beanInfo.getPropertyDescriptors();
-			if (descriptors != null){
-				for (PropertyDescriptor propertyDescriptor : descriptors){
-					if (name.equals(propertyDescriptor.getName())){
+			BeanInfo info = Introspector.getBeanInfo(beanObj.getClass());
+			PropertyDescriptor[] propertyDescriptors = info.getPropertyDescriptors();
+			if (propertyDescriptors != null) {
+				for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+					if (propertyDescriptor.getName().equals(name)) {
+						//比对一致=>找到了,获得写入属性的set方法
 						method = propertyDescriptor.getWriteMethod();
 					}
 				}
@@ -36,8 +36,8 @@ public class BeanUtil {
 		} catch (IntrospectionException e) {
 			e.printStackTrace();
 		}
-		if (method == null){
-			throw new RuntimeException("please check class Set() method in "+name);
+		if (method == null) {
+			throw new RuntimeException("please check Set() method in [" + name+"]");
 		}
 		return method;
 	}

@@ -9,13 +9,24 @@ package com.zhu.bean;
  * 2019/3/17
  */
 public class TestBeanB {
-	private TestBeanA A;
 
-	public TestBeanA getA() {
-		return A;
+	private String name;
+
+	private TestBeanA testBeanA;
+
+	public String getName() {
+		return name;
 	}
 
-	public void setA(TestBeanA a) {
-		A = a;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public TestBeanA getTestBeanA() {
+		return testBeanA;
+	}
+
+	public void setTestBeanA(TestBeanA testBeanA) {
+		this.testBeanA = testBeanA;
 	}
 }

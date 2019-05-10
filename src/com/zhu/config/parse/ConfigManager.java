@@ -44,24 +44,22 @@ public class ConfigManager {
         if (list!=null){
             for (Element node : list) {
                 Bean bean = new Bean();
-                String name = node.attributeValue("name");
-                String className = node.attributeValue("class");
-                bean.setName(name);
-                bean.setClassName(className);
+                bean.setName(node.attributeValue("name"));
+                bean.setClassName(node.attributeValue("class"));
+                if (node.attributeValue("scope") != null){
+                    bean.setScope(node.attributeValue("scope"));
+                }
                 List<Element>children = node.elements("property");
                 if (children!=null){
                     for (Element child : children) {
                         Property property = new Property();
-                        String propertiesName = child.attributeValue("name");
-                        String propertiesValue = child.attributeValue("value");
-                        String propertiesRef = child.attributeValue("ref");
-                        property.setName(propertiesName);
-                        property.setValue(propertiesValue);
-                        property.setRef(propertiesRef);
+                        property.setName(child.attributeValue("name"));
+                        property.setValue(child.attributeValue("value"));
+                        property.setRef(child.attributeValue("ref"));
                         bean.getPropertyList().add(property);
                     }
                 }
-                map.put(name,bean);
+                map.put(node.attributeValue("name"),bean);
             }
         }
         return map;
